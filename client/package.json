@@ -5,6 +5,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.18",
     "@chakra-ui/react": "^2.5.5",
+    "@emailjs/browser": "^4.3.3",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@iconify/icons-bi": "^1.2.16",

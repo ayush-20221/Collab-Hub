@@ -43,6 +43,7 @@ import {
 import "react-circular-progressbar/dist/styles.css";
 import { useLocation } from "react-router-dom";
 import { CopyIcon } from "@chakra-ui/icons";
+
 export default function IDE({
   modal,
   toggleModal,
@@ -444,9 +445,9 @@ export default function IDE({
 
     const onColorUpdate = (e) => {
       let objectColor;
-      for (let i = 0; i < e.path.length; i++) {
-        if (e.path[i].dataset.color) {
-          if (e.path[i].dataset.color === "white") objectColor = "#ffffff";
+      for (let i = 0; i < e.composedPath().length; i++) {
+        if (e.composedPath()[i].dataset.color) {
+          if (e.composedPath()[i].dataset.color === "white") objectColor = "#ffffff";
           else objectColor = pencilColor;
           break;
         }
