@@ -38,7 +38,6 @@ import {
   Button,
   useToast,
   Select,
-  SelectField,
 } from "@chakra-ui/react";
 import "react-circular-progressbar/dist/styles.css";
 import { useLocation } from "react-router-dom";
@@ -190,6 +189,7 @@ export default function IDE({
       socket.off("receive-changes", updateC);
       clearTimeout(savetodb);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, cpp, java, js, pascal, php, perl, ruby, python, input, output]);
 
   function addVideoStream(videoCont, video, stream) {
@@ -584,6 +584,7 @@ export default function IDE({
       );
     };
     socket.on("drawing", onDrawingEvent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const handleInputFileChange = () => {

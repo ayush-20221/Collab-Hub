@@ -248,7 +248,6 @@ function Signup() {
     email: "",
     password: "",
   });
-  const form = useRef();
   const toast = useToast({ position: "top" });
 
   const handleValuedInput = (e) => {
