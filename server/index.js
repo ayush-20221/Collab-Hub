@@ -1,11 +1,11 @@
 require("dotenv").config({ path: ".env" });
 // const FRONTEND_ORIGIN ="https://Collab Hub-frontend.netlify.app";
-const FRONTEND_ORIGIN ="http://localhost:3000/";
-const PORT_NUMBER = 4000;
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
+const PORT_NUMBER = process.env.PORT_NUMBER;
 // const DB_CONNECTION_URL="mongodb+srv://ayush:error@cluster1.zprhwk6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1"
 const DB = process.env.DB_CONNECTION_URL
-const JWT_SECRET_KEY="secret"
-const PEER_SERVER_PORT=9002
+const JWT_SECRET_KEY=process.env.JWT_SECRET_KEY
+const PEER_SERVER_PORT=process.env.PEER_SERVER_PORT
 
 
 const express = require("express");
@@ -16,7 +16,9 @@ const meetingRouter = require("./routes/meetingRoute");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: FRONTEND_ORIGIN,
+}));
 
 app.get("/", (req, res) => {
   res.send("Welcome to Collab Hub app");
