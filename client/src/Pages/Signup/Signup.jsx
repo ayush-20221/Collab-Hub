@@ -349,6 +349,12 @@ function Signup() {
           password: "",
         });
         navigate("/login");
+      } else {
+        toast({
+          title: data.message || `Couldn't Post Data`,
+          status: "error",
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.log(error);

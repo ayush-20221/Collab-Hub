@@ -17,20 +17,19 @@ const registerNewUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(500).send("email and password required");
+      return res.status(400).send({ success: false, message: "email and password required" });
     }
     if (!validator.isEmail(email)) {
-      return res
-        .status(500)
-        .send({ message: "email is not valid email address" });
+      return res.status(400).send({ success: false, message: "email is not valid email address" });
     }
     if (!validator.isStrongPassword(password)) {
-      return res.status(500).send({ message: "Enter Strong Password" });
+      return res.status(400).send({ success: false, message: "Enter Strong Password" });
     }
 
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(500).send({
+      return res.status(400).send({
+        success: false,
         message: `User with this email ${email} already exists!`,
       });
     }
@@ -44,7 +43,7 @@ const registerNewUser = async (req, res) => {
     });
     
   } catch (err) {
-    res.status(500).send("Registration failed");
+    res.status(500).send({ success: false, message: "Registration failed" });
     console.log(err);
   }
 };
@@ -53,18 +52,18 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(500).send("Email and Password required");
+      return res.status(400).send({ success: false, message: "Email and Password required" });
     }
     let user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(500).send("Register First");
+      return res.status(400).send({ success: false, message: "Register First" });
     }
 
     let isSame = await bcrypt.compare(password, user.password);
 
     if (!isSame) {
-      return res.status(500).send("Wrong Password");
+      return res.status(400).send({ success: false, message: "Wrong Password" });
     }
 
     let token = generateToken(user);
@@ -79,7 +78,7 @@ const loginUser = async (req, res) => {
       accessToken: token,
     });
   } catch (err) {
-    res.status(500).send("Login failed");
+    res.status(500).send({ success: false, message: "Login failed" });
   }
 };
 

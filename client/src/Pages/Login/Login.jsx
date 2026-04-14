@@ -304,6 +304,12 @@ function Login() {
           password: "",
         });
         navigate(window.location.search.replace("?next=", "") || "/");
+      } else {
+        toast({
+          title: data.message || `Login Failed`,
+          status: "error",
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.log(error);
