@@ -55,5 +55,14 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.3.2"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "overrides": {
+    "react-codemirror2": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   }
 }
