@@ -1,243 +1,24 @@
-// import {
-//   Flex,
-//   Box,
-//   FormControl,
-//   FormLabel,
-//   Input,
-//   InputGroup,
-//   InputRightElement,
-//   Stack,
-//   Button,
-//   Heading,
-//   Text,
-//   useColorModeValue,
-//   Link,
-//   useToast,
-// } from "@chakra-ui/react";
-// import { useState } from "react";
-// import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-// import { useNavigate } from "react-router-dom";
-
-// function Signup() {
-//   const navigate = useNavigate();
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [loading, setLoading] = useState(false);
-//   const [inputState, setInputState] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//   });
-//   const toast = useToast({ position: "top" });
-
-//   const handleValuedInput = (e) => {
-//     setInputState({
-//       ...inputState,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-//   const validateForm = ({ name, email, password }) => {
-//     if (!name) {
-//       toast({
-//         title: `Name is required`,
-//         status: "error",
-//         isClosable: true,
-//       });
-//       return false;
-//     }
-//     if (!email) {
-//       toast({
-//         title: `Email is required`,
-//         status: "error",
-//         isClosable: true,
-//       });
-//       return false;
-//     }
-//     if (!email.includes("@")) {
-//       toast({
-//         title: `Enter valid email`,
-//         status: "error",
-//         isClosable: true,
-//       });
-//       return false;
-//     }
-//     if (!password) {
-//       toast({
-//         title: `Password is required`,
-//         status: "error",
-//         isClosable: true,
-//       });
-//       return false;
-//     }
-//     if (password.length < 8) {
-//       toast({
-//         title: `Password should be over 8 characters.`,
-//         status: "error",
-//         isClosable: true,
-//       });
-//       return false;
-//     }
-
-//     return true;
-//   };
-
-//   const handleFormSubmit = async () => {
-//     if (!validateForm(inputState)) return;
-
-//     try {
-//       setLoading(true);
-//       console.log(inputState)
-//       let response = await fetch(
-//        `${process.env.REACT_APP_BACKEND_ENDPOINT_URL}/auth/register`,
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify(inputState),
-//         }
-//       );
-//       let data = await response.json();
-//       // console.log(data.status)
-//       setLoading(false);
-//       if (data.success) {
-//         toast({
-//           title: `Registration Successful`,
-//           status: "success",
-//           isClosable: true,
-//         });
-//         console.log(data);
-//         setInputState({
-//           name: "",
-//           email: "",
-//           password: "",
-//         });
-//         navigate("/login");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       toast({
-//         title: `Couldn't Post Data`,
-//         status: "error",
-//         isClosable: true,
-//       });
-//     }
-//   };
-//   return (
-//     <Flex
-//       minH={"100vh"}
-//       align={"center"}
-//       justify={"center"}
-//       bg={useColorModeValue("gray.50", "gray.800")}
-//     >
-//       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-//         <Stack align={"center"}>
-//           <Heading fontSize={"4xl"} textAlign={"center"}>
-//             Create Account
-//           </Heading>
-//           <Text fontSize={"lg"} color={"gray.600"}>
-//             To sign up, Please enter your Name, Email and Password
-//           </Text>
-//         </Stack>
-//         <Box
-//           rounded={"lg"}
-//           bg={useColorModeValue("white", "gray.700")}
-//           boxShadow={"lg"}
-//           p={8}
-//         >
-//           <Stack spacing={4}>
-//             <FormControl id="name" isRequired>
-//               <FormLabel>Name</FormLabel>
-//               <Input
-//                 type="text"
-//                 placeholder="Name"
-//                 name="name"
-//                 onChange={handleValuedInput}
-//               />
-//             </FormControl>
-//             <FormControl id="email" isRequired>
-//               <FormLabel>Email address</FormLabel>
-//               <Input
-//                 type="email"
-//                 placeholder="Enter email"
-//                 name="email"
-//                 onChange={handleValuedInput}
-//               />
-//             </FormControl>
-//             <FormControl id="password" isRequired>
-//               <FormLabel>Password</FormLabel>
-//               <InputGroup>
-//                 <Input
-//                   type={showPassword ? "text" : "password"}
-//                   name="password"
-//                   onChange={handleValuedInput}
-//                 />
-//                 <InputRightElement h={"full"}>
-//                   <Button
-//                     variant={"ghost"}
-//                     onClick={() =>
-//                       setShowPassword((showPassword) => !showPassword)
-//                     }
-//                   >
-//                     {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-//                   </Button>
-//                 </InputRightElement>
-//               </InputGroup>
-//             </FormControl>
-//             <Stack spacing={10} pt={2}>
-//               <Button
-//                 isLoading={loading}
-//                 loadingText="Submitting"
-//                 size="lg"
-//                 bg={"teal.400"}
-//                 color={"white"}
-//                 _hover={{
-//                   bg: "teal.500",
-//                 }}
-//                 onClick={handleFormSubmit}
-//               >
-//                 Sign up
-//               </Button>
-//             </Stack>
-//             <Stack pt={6}>
-//               <Text align={"center"}>
-//                 Already a user?{" "}
-//                 <Link
-//                   color={"teal.400"}
-//                   onClick={() => {
-//                     navigate("/login");
-//                   }}
-//                 >
-//                   Login
-//                 </Link>
-//               </Text>
-//             </Stack>
-//           </Stack>
-//         </Box>
-//       </Stack>
-//     </Flex>
-//   );
-// }
-// export default Signup;
 import {
   Flex,
   Box,
   FormControl,
   FormLabel,
   Input,
-  InputGroup,
-  InputRightElement,
   Stack,
+  Link,
   Button,
   Heading,
   Text,
-  useColorModeValue,
-  Link,
   useToast,
+  InputGroup,
+  InputRightElement,
+  IconButton,
 } from "@chakra-ui/react";
-import { useState, useRef } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailjs from '@emailjs/browser';
+import { motion } from "framer-motion";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 function Signup() {
   const navigate = useNavigate();
@@ -262,7 +43,7 @@ function Signup() {
       .send('collabhub', 'collabhub', {
         user_name: inputState.name,
         user_email: inputState.email,
-        message: 'Thank you for signing up!',
+        message: 'Welcome to Collab Hub! Your account has been created successfully.',
       }, 'uQtQVFTlTbFumTjdM')
       .then(
         () => {
@@ -363,95 +144,166 @@ function Signup() {
         status: "error",
         isClosable: true,
       });
+      setLoading(false);
     }
   };
 
   return (
     <Flex
-      minH={"100vh"}
+      h={"calc(100vh - 65px)"}
+      overflow={"hidden"}
       align={"center"}
       justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      backgroundPosition={"center"}
+      backgroundRepeat={"no-repeat"}
+      backgroundSize={"cover"}
+      position={"relative"}
+      backgroundImage={"url(/landingBG.jpg)"}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
+      {/* Dark overlay for text contrast and premium feel */}
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="rgba(10, 15, 26, 0.75)"
+        backdropFilter="blur(10px)"
+        zIndex={0}
+      />
+
+      <Stack
+        as={motion.div}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        zIndex={1}
+        spacing={8}
+        mx={"auto"}
+        maxW={"lg"}
+        py={12}
+        px={6}
+        w="full"
+      >
+        <Stack align={"center"} textAlign="center">
+          <Heading 
+            fontSize={"4xl"} 
+            color="white"
+            fontWeight="extrabold"
+            letterSpacing="tight"
+          >
             Create Account
           </Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            To sign up, Please enter your Name, Email and Password
+          <Text fontSize={"lg"} color={"gray.400"}>
+            Join the future of collaborative coding 🚀
           </Text>
         </Stack>
+
         <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
+          bg="rgba(255, 255, 255, 0.03)"
+          border="1px solid"
+          borderColor="whiteAlpha.200"
+          backdropFilter="blur(16px)"
+          rounded={"3xl"}
+          boxShadow={"2xl"}
           p={8}
+          as={motion.div}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Stack spacing={4}>
+          <Stack spacing={5}>
             <FormControl id="name" isRequired>
-              <FormLabel>Name</FormLabel>
+              <FormLabel color="gray.300">Full Name</FormLabel>
               <Input
+                variant="filled"
+                bg="whiteAlpha.100"
+                color="white"
+                _hover={{ bg: "whiteAlpha.200" }}
+                _focus={{ bg: "whiteAlpha.200", borderColor: "purple.400" }}
                 type="text"
-                placeholder="Name"
+                placeholder="Enter your name"
                 name="name"
                 onChange={handleValuedInput}
+                rounded="xl"
+                size="lg"
+                _placeholder={{ color: "whiteAlpha.400" }}
               />
             </FormControl>
+
             <FormControl id="email" isRequired>
-              <FormLabel>Email address</FormLabel>
+              <FormLabel color="gray.300">Email Address</FormLabel>
               <Input
+                variant="filled"
+                bg="whiteAlpha.100"
+                color="white"
+                _hover={{ bg: "whiteAlpha.200" }}
+                _focus={{ bg: "whiteAlpha.200", borderColor: "purple.400" }}
                 type="email"
-                placeholder="Enter email"
+                placeholder="Enter your email"
                 name="email"
                 onChange={handleValuedInput}
+                rounded="xl"
+                size="lg"
+                _placeholder={{ color: "whiteAlpha.400" }}
               />
             </FormControl>
+
             <FormControl id="password" isRequired>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
+              <FormLabel color="gray.300">Password</FormLabel>
+              <InputGroup size="lg">
                 <Input
+                  variant="filled"
+                  bg="whiteAlpha.100"
+                  color="white"
+                  _hover={{ bg: "whiteAlpha.200" }}
+                  _focus={{ bg: "whiteAlpha.200", borderColor: "purple.400" }}
                   type={showPassword ? "text" : "password"}
                   name="password"
+                  placeholder="Create a password"
                   onChange={handleValuedInput}
+                  rounded="xl"
+                  _placeholder={{ color: "whiteAlpha.400" }}
                 />
                 <InputRightElement h={"full"}>
-                  <Button
+                  <IconButton
                     variant={"ghost"}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
+                    color="whiteAlpha.600"
+                    _hover={{ color: "white" }}
+                    onClick={() => setShowPassword((showPassword) => !showPassword)}
+                    icon={showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  />
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <Stack spacing={10} pt={2}>
+
+            <Stack spacing={8} pt={2}>
               <Button
                 isLoading={loading}
-                loadingText="Submitting"
                 size="lg"
-                bg={"teal.400"}
-                color={"white"}
+                rounded="full"
+                bgGradient="linear(to-r, purple.400, purple.500)"
+                color="white"
                 _hover={{
-                  bg: "teal.500",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 10px 20px -10px rgba(159,122,234,0.7)",
+                  bgGradient: "linear(to-r, purple.500, purple.600)"
                 }}
+                transition="all 0.2s"
                 onClick={handleFormSubmit}
               >
-                Sign up
+                Sign Up
               </Button>
-            </Stack>
-            <Stack pt={6}>
-              <Text align={"center"}>
-                Already a user?{" "}
+
+              <Text align={"center"} color="gray.400">
+                Already a member?{" "}
                 <Link
-                  color={"teal.400"}
-                  onClick={() => {
-                    navigate("/login");
-                  }}
+                  color={"purple.300"}
+                  fontWeight="bold"
+                  onClick={() => navigate("/login")}
+                  _hover={{ color: "purple.200", textDecoration: "none" }}
                 >
-                  Login
+                  Sign in
                 </Link>
               </Text>
             </Stack>

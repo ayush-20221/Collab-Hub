@@ -4,7 +4,7 @@ export const MyContext = createContext();
 
 function ContextProvider({ children }) {
   const [isAuth, setIsAuth] = useState(
-    sessionStorage.getItem("accessToken") ? true : false
+    localStorage.getItem("accessToken") ? true : false
   );
   const toggleIsAuth = (value) => {
     setIsAuth(value);

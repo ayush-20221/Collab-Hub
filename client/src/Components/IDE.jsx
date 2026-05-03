@@ -87,6 +87,15 @@ export default function IDE({
   myVideoCont.className = "videoContainer rounded mb-4";
   myVideo.muted = true;
   const [myStream, setMystream] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (myStream) {
+        myStream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [myStream]);
+
   const peers = {};
   const colorsRef = useRef(null);
   const [userId, setUserId] = useState(null);
@@ -629,7 +638,7 @@ export default function IDE({
                       <div className="code-editor-java flex flex-col h-full mb-5 java-code">
                         <div className="editor-header flex justify-between gap-4 align-center p-2">
                           <Button
-                            colorScheme="teal"
+                            colorScheme="purple"
                             variant={"outline"}
                             rightIcon={<CopyIcon />}
                             onClick={() => {
@@ -644,7 +653,7 @@ export default function IDE({
                               });
                             }}
                           >
-                            Copy Mock Interview Link
+                            Copy Arena Access Link
                           </Button>
                           <LanguageSelector
                             language={selected.toLowerCase()}
@@ -830,12 +839,12 @@ export default function IDE({
                     : ""
                 } duration-500`}
               >
-                <div className="shadow-lg border-2 border-opacity-50 border-theme-teal-dark mx-2 rounded-xl">
+                <div className="shadow-lg border border-whiteAlpha.200 backdrop-blur-md bg-whiteAlpha.50 mx-2 rounded-xl overflow-hidden">
                   <Tabs
                     index={textEditor === "input" ? 0 : 1}
                     isFitted
                     variant="line"
-                    colorScheme="#224f5c50"
+                    colorScheme="pink"
                   >
                     <TabList>
                       <Tab
@@ -858,7 +867,8 @@ export default function IDE({
                     <TabPanels>
                       <TabPanel paddingX="2" paddingBottom="2" paddingTop="0">
                         <textarea
-                          className="  rounded-md outline-none w-full h-full p-4 resize-none"
+                          className="rounded-md outline-none w-full h-full p-4 resize-none bg-blackAlpha.400 color-white border-whiteAlpha.100 focus:border-pink.400 transition-all"
+                          style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: 'white', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                           placeholder="enter an input..."
                           onChange={(e) => {
                             setInput(e.target.value);
@@ -871,7 +881,7 @@ export default function IDE({
                       <TabPanel paddingX="0" paddingY="0" className="relative">
                         {processing && (
                           <Progress
-                            colorScheme="teal"
+                            colorScheme="purple"
                             size="sm"
                             value={percentageStage}
                             className="mb-1"
@@ -885,6 +895,7 @@ export default function IDE({
                             className={` ${
                               processing ? "transform animate-pulse" : ""
                             } rounded-md outline-none w-full h-full pt-4 pb-6 px-6 resize-none`}
+                            style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: 'white', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                             readOnly
                             placeholder="output will be shown here"
                             value={output}
@@ -937,7 +948,7 @@ function RightVideoPanel({ muteCam, muteMic }) {
         className="flex overflow-hidden custom-shadow-light h-full rounded-lg justify-start items-center flex-col bg-opacity-100 relative pt-2 px-2 shadow-lg"
       >
         <Tag size={"md"} variant="solid" w="full" colorScheme="#EE9B00">
-          People in room
+           Active Collaborators
         </Tag>
         <div className="justify-between flex-col pt-2 pb-3 overflow-y-auto">
           <div
@@ -986,15 +997,24 @@ function RightVideoPanel({ muteCam, muteMic }) {
 function LanguageSelector({ language, setLanguage }) {
   return (
     <Select
-      // className="w-20 cursor-pointer border rounded px-2 py-1"
       width={"8rem"}
       cursor={"pointer"}
-      border={"1px solid rgb(45,121,123)"}
+      border={"1px solid"}
+      borderColor="pink.400"
+      bg="whiteAlpha.100"
+      color="white"
+      _hover={{ bg: "whiteAlpha.200" }}
+      focusBorderColor="purple.400"
+      sx={{
+        '> option': {
+          background: 'rgba(15, 23, 42, 0.95)',
+          color: 'white',
+        },
+      }}
       onChange={(e) => {
         setLanguage(e.target.value);
       }}
       value={language}
-      // name="language-selector"
     >
       <option value="cpp">C++</option>
       <option value="c">C</option>

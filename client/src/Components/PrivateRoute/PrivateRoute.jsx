@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { Navigate } from "react-router-dom";
 
 function PrivateRoute({ children }) {
-  const token = sessionStorage.getItem("accessToken");
+  const token = localStorage.getItem("accessToken");
   const toast = useToast({ position: "top" });
 
   if (!token) {

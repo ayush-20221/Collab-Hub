@@ -10,28 +10,61 @@ import {
   useDisclosure,
   Stack,
   Divider,
+  Text
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
 
 const Links = [
-  { title: "Home", path: "/" },
+  { title: "Dashboard", path: "/" },
   // { title: "Login", path: "/login" },
   { title: "Schedule", path: "/schedule" },
   { title: "Join", path: "/join" },
-  { title: "Mock Interview", path: "/mock-interview" },
+  { title: "Code Arena", path: "/code-arena" },
 ];
 
-const NavLink = ({ title, path }) => <Link 
-style={{ fontSize: "1rem"}}
-to={path}>{title}</Link>;
+const NavLink = ({ title, path }) => (
+  <Box
+    as={motion.div}
+    whileHover={{ y: -2 }}
+    whileTap={{ scale: 0.95 }}
+  >
+    <Box
+      as={Link}
+      to={path}
+      px={3}
+      py={2}
+      rounded={"md"}
+      color={"gray.300"}
+      fontWeight={"medium"}
+      transition={"all 0.2s"}
+      _hover={{
+        textDecoration: "none",
+        color: "white",
+        bg: "whiteAlpha.200",
+      }}
+    >
+      {title}
+    </Box>
+  </Box>
+);
 
 const Navbar = () => {
-  const {isAuth} = useContext(MyContext);
+  const { isAuth } = useContext(MyContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Box bg="white.100" px={4}>
+      <Box
+        position="sticky"
+        top={0}
+        zIndex={1000}
+        bg="rgba(15, 23, 42, 0.85)"
+        backdropFilter="blur(12px)"
+        borderBottom="1px solid"
+        borderColor="whiteAlpha.200"
+        px={4}
+      >
         <Flex
           h={16}
           alignItems={"center"}
@@ -39,21 +72,32 @@ const Navbar = () => {
           fontSize={"xl"}
         >
           <HStack spacing={8} alignItems={"center"}>
-            <Box fontSize={"2xl"} fontWeight={"semibold"} color={"teal.600"}>
-              {" "}
-              <Link to={"/"}>Collab Hub</Link>
+            <Box
+              as={motion.div}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              fontSize={"2xl"}
+              fontWeight={"extrabold"}
+            >
+              <Link to={"/"}>
+                <Text
+                  as="span"
+                  bgGradient="linear(to-r, purple.300, pink.400)"
+                  bgClip="text"
+                >
+                  Collab Hub
+                </Text>
+              </Link>
             </Box>
           </HStack>
           <Flex alignItems={"center"}>
             <HStack
               as={"nav"}
-              spacing={20}
-              fontWeight={"semibold"}
+              spacing={{ base: 4, md: 8 }}
               display={{ base: "none", md: "flex" }}
             >
               {Links.map(({ title, path }) => (
-                <NavLink 
-                key={title} title={title} path={path} />
+                <NavLink key={title} title={title} path={path} />
               ))}
               {isAuth ? (
                 <NavLink key={"logout"} title={"Logout"} path={"/logout"} />
@@ -64,6 +108,9 @@ const Navbar = () => {
           </Flex>
           <IconButton
             size={"md"}
+            color={"white"}
+            variant={"ghost"}
+            _hover={{ bg: "whiteAlpha.200" }}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
             aria-label={"Open Menu"}
             display={{ md: "none" }}
@@ -86,7 +133,6 @@ const Navbar = () => {
           </Box>
         ) : null}
       </Box>
-      <Divider />
     </>
   );
 };

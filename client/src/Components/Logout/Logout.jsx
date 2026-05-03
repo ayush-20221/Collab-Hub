@@ -9,10 +9,10 @@ function Logout() {
   return (
     <Box p={"30"}>
       <Button
-        colorScheme="teal"
+        colorScheme="purple"
         variant="solid"
         onClick={() => {
-          sessionStorage.removeItem("accessToken");
+          localStorage.removeItem("accessToken");
           localStorage.removeItem("user");
           toggleIsAuth(false);
           navigate("/login");

@@ -14,7 +14,7 @@ const createNewMeeting = async (req, res) => {
     const { topic, guest, dateandtime, duration, meetingLink } = req.body;
 
     if (!topic || !guest || !dateandtime || !duration || !meetingLink) {
-      return res.status(404).send({ message: "Some fields are missing" });
+      return res.status(400).send({ success: false, message: "Some fields are missing" });
     }
     let newMeeting = await Meeting.create({
       topic,
@@ -30,7 +30,7 @@ const createNewMeeting = async (req, res) => {
   } catch (err) {
     res
       .status(500)
-      .send({ success: true, message: "There was an server side error" });
+      .send({ success: false, message: "There was an server side error" });
   }
 };
 

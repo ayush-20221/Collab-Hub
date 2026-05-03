@@ -1,63 +1,62 @@
-import { useParams } from "react-router-dom";
-import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import { Box, Text } from "@chakra-ui/react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { JitsiMeeting } from "@jitsi/react-sdk";
 
 function Room() {
   const { roomID } = useParams();
-  console.log(roomID)
-  const myMeeting = async (element) => {
-    const appID = 246154957;
-    const serverSecret = "b9bdcc8b9c977ef3236d39959b117057";
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-      appID,
-      serverSecret,
-      roomID,
-      Date.now().toString(),
-      JSON.parse(localStorage.getItem("user")).name || "user name"
-    );
-    const zp = ZegoUIKitPrebuilt.create(kitToken);
-    zp.joinRoom({
-      container: element,
-      sharedLinks: [
-        {
-          name: "Copy link",
-          url:
-            window.location.protocol +
-            "//" +
-            window.location.host +
-            window.location.pathname +
-            "?roomID=" +
-            roomID,
-        },
-      ],
-      scenario: {
-        // mode: ZegoUIKitPrebuilt.OneONoneCall,
-        mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
-      },
-      showScreenSharingButton: true,
-    });
-  };
+  const navigate = useNavigate();
+  const userName = JSON.parse(localStorage.getItem("user"))?.name || "user name";
 
   return (
-    <Box bg={"gray.50"} h={"100vh"}>
-      <Box>
-        <Text fontSize={"2xl"} fontWeight={"semibold"}>
-          Room ID : {roomID}
+    <Box bg={"gray.50"} h={"calc(100vh - 76px)"} overflow={"hidden"} display={"flex"} flexDirection={"column"}>
+      <Flex p={4} bg="white" shadow="sm" align="center" justify="space-between">
+        <Text fontSize={"2xl"} fontWeight={"semibold"} color="gray.800" isTruncated>
+          Room ID: {roomID}
         </Text>
+        <Button 
+          leftIcon={<CloseIcon boxSize={3} />} 
+          colorScheme="red" 
+          variant="outline" 
+          size="sm"
+          onClick={() => navigate("/join")}
+        >
+          Leave Room
+        </Button>
+      </Flex>
+      <Box flex={1} width={"100%"}>
+        <JitsiMeeting
+          domain="alpha.jitsi.net"
+          roomName={`CollabHubRoom${roomID.replace(/[^a-zA-Z0-9]/g, "")}`}
+          configOverwrite={{
+            startWithAudioMuted: true,
+            disableModeratorIndicator: true,
+            startScreenSharing: true,
+            enableEmailInStats: false,
+            prejoinPageEnabled: false,
+          }}
+          interfaceConfigOverwrite={{
+            DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+          }}
+          userInfo={{
+            displayName: userName,
+          }}
+          onApiReady={(externalApi) => {
+            // Automatically return to the previous page when the user uses Jitsi's red hangup button
+            externalApi.addListener("videoConferenceLeft", () => {
+              navigate("/join");
+            });
+            externalApi.addListener("readyToClose", () => {
+              navigate("/join");
+            });
+          }}
+          getIFrameRef={(iframeRef) => {
+            iframeRef.style.height = '100%';
+            iframeRef.style.width = '100%';
+          }}
+        />
       </Box>
-      <Box
-        ref={myMeeting}
-        sx={{
-          width: "100vw",
-          height: "87.5vh",
-        }}
-      />
     </Box>
-    // <div>
-    //   <h1>Room</h1>
-    //   <h2>Room Id : {roomID}</h2>
-    //   {/* <div ref={myMeeting}/> */}
-    // </div>
   );
 }
 export default Room;

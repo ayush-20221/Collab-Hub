@@ -7,7 +7,7 @@ const JWT_SECRET_KEY="secret"
 
 const generateToken = ({ name, email, _id }) => {
   const token = jwt.sign({ name, email, _id }, JWT_SECRET_KEY, {
-    expiresIn: "24h",
+    expiresIn: "30d",
   });
   return token;
 };

@@ -17,8 +17,8 @@ function AllRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/logout" element={<Logout />} />
-      <Route path="/mock-interview" element={<Preview />} />
-      <Route path="/mock-interview/:docId" element={<MockInterview />} />
+      <Route path="/code-arena" element={<Preview />} />
+      <Route path="/code-arena/:docId" element={<MockInterview />} />
       <Route
         path="/schedule"
         element={

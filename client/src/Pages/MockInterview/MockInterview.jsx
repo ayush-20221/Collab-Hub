@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import IDE from "../../Components/IDE";
-// import { Login, Logout } from "./components/auth/Auth0";
-// import { useAuth0 } from '@auth0/auth0-react'
-import { Tooltip, Avatar } from "@chakra-ui/react";
+import { Tooltip, Avatar, Flex, Box, Button, HStack, Text, useToast, IconButton } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
-// import axios from 'axios';
-// import { v4 as uuidV4 } from "uuid";
-// import ReactGA from 'react-ga';
 import runIcon from "../../images/icons/run.svg";
 import whiteboard24Regular from "@iconify/icons-fluent/whiteboard-24-regular";
-// import Preview from "../../Components/Preview";
 
 const MockInterview = () => {
   const [textEditor, setTextEditor] = useState("input");
@@ -27,18 +22,10 @@ const MockInterview = () => {
   const [php, setphp] = useState("");
   const [ruby, setruby] = useState("");
   const [modal, setModal] = useState(false);
-  //   const [docId, setDocId] = useState(null);
-  //   const [isDocId, setIsDocId] = useState(false);
-  // const { isAuthenticated, user } = useAuth0();
   const [isInputBoxShown, setisInputBoxShown] = useState(true);
+  const toast = useToast({ position: "top" });
 
   const runCode = () => {
-    //   ReactGA.event({
-    //     category: `button.clicked`,
-    //     action: `Run Code`,
-    //     lang: `${selected}`
-    //   });
-
     setOutput("");
     setTextEditor("output");
     setProcessing(true);
@@ -46,7 +33,6 @@ const MockInterview = () => {
     setisInputBoxShown(false);
 
     var lang = selected;
-    // const backend_url = "https://codebuddy-backend.onrender.com/api/v1/run";
     const backend_url = process.env.REACT_APP_BACKEND_ENDPOINT_URL + "/runcode";
     var source = "print(1)";
     if (lang === "python") {
@@ -68,27 +54,16 @@ const MockInterview = () => {
     }
 
     const data = {
-      langauge : selected,
+      langauge: selected,
       stdin: input,
       files: [
         {
-          name: "codebuddy." + selected,
+          name: "collabhub." + selected,
           content: source,
         },
       ],
     };
 
-    // var data = {
-    //   lang: lang.toUpperCase(),
-    //   source: source,
-    //   input: input,
-    //   memory_limit: 243232,
-    //   time_limit: 5,
-    //   context: "{'id': 213121}",
-    // //   callback: "https://client.com/callback/",
-    // };
-
-    // var status;
     var raw = JSON.stringify(data);
 
     var requestOptions = {
@@ -99,6 +74,7 @@ const MockInterview = () => {
       body: raw,
       redirect: "follow",
     };
+
     fetch(backend_url, requestOptions)
       .then((res) => res.json())
       .then((data) => {
@@ -109,88 +85,109 @@ const MockInterview = () => {
       .catch((err) => {
         console.log(err);
         setProcessing(false);
+        toast({
+          title: "Execution Error",
+          description: "Failed to connect to the compilation server.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         return;
       });
   };
 
   const toggleModal = () => {
-    //   ReactGA.event({
-    //     category: `button.clicked`,
-    //     action: `Whiteboard ${modal ? "Opened" : "Closed"}`,
-    //   });
     setModal(!modal);
   };
 
+  const navigate = useNavigate();
+  const handleLeaveRoom = () => {
+    window.location.href = "/code-arena";
+  };
+
   return (
-    <div
-      style={
-        {
-          // height: "90vh",
-        }
-      }
-      className="h-screen flex flex-grow flex-col overflow-hidden"
+    <Flex
+      direction="column"
+      h="calc(100vh - 70px)" // Assuming standard navbar height presence, adjust if standalone
+      w="100vw"
+      overflow="hidden"
+      bg="gray.900" // Premium dark base
+      bgImage={"url(/landingBG.jpg)"}
+      bgSize="cover"
+      bgPosition="center"
+      position="relative"
     >
-      {/* {isDocId ? ( */}
-      {/* <> */}
-      <Header
-        // userInfo={{}}
-        runCode={runCode}
-        // isAuthenticated={false}
-        toggleModal={toggleModal}
-        isInputBoxShown={isInputBoxShown}
-        setisInputBoxShown={setisInputBoxShown}
+      {/* Impeccable dark glass overlay */}
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="rgba(10, 15, 26, 0.85)"
+        backdropFilter="blur(16px)"
+        zIndex={0}
       />
-      <IDE
-        // docId={docId}
-        modal={modal}
-        java={java}
-        setjava={setjava}
-        toggleModal={toggleModal}
-        setModal={setModal}
-        cpp={cpp}
-        setcpp={setcpp}
-        js={js}
-        setjs={setjs}
-        php={php}
-        setphp={setphp}
-        perl={perl}
-        setperl={setperl}
-        ruby={ruby}
-        setruby={setruby}
-        pascal={pascal}
-        setpascal={setpascal}
-        python={python}
-        setpython={setpython}
-        input={input}
-        setInput={setInput}
-        selected={selected}
-        setSelected={setSelected}
-        output={output}
-        setOutput={setOutput}
-        textEditor={textEditor}
-        setTextEditor={setTextEditor}
-        processing={processing}
-        setProcessing={setProcessing}
-        percentageStage={percentageStage}
-        setPercentageStage={setPercentageStage}
-        isInputBoxShown={isInputBoxShown}
-      />
-      {/* </>
-      ) : (
-        <Preview docId={docId} /> */}
-      {/* )} */}
-    </div>
+
+      <Flex direction="column" zIndex={1} h="full">
+        <Header
+          runCode={runCode}
+          toggleModal={toggleModal}
+          isInputBoxShown={isInputBoxShown}
+          setisInputBoxShown={setisInputBoxShown}
+          processing={processing}
+          handleLeaveRoom={handleLeaveRoom}
+        />
+
+        <Box flex="1" position="relative" overflow="hidden">
+          <IDE
+            modal={modal}
+            java={java}
+            setjava={setjava}
+            toggleModal={toggleModal}
+            setModal={setModal}
+            cpp={cpp}
+            setcpp={setcpp}
+            js={js}
+            setjs={setjs}
+            php={php}
+            setphp={setphp}
+            perl={perl}
+            setperl={setperl}
+            ruby={ruby}
+            setruby={setruby}
+            pascal={pascal}
+            setpascal={setpascal}
+            python={python}
+            setpython={setpython}
+            input={input}
+            setInput={setInput}
+            selected={selected}
+            setSelected={setSelected}
+            output={output}
+            setOutput={setOutput}
+            textEditor={textEditor}
+            setTextEditor={setTextEditor}
+            processing={processing}
+            setProcessing={setProcessing}
+            percentageStage={percentageStage}
+            setPercentageStage={setPercentageStage}
+            isInputBoxShown={isInputBoxShown}
+          />
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 
 function Header({
   runCode,
   toggleModal,
-  isAuthenticated,
   isInputBoxShown,
   setisInputBoxShown,
+  processing,
+  handleLeaveRoom,
 }) {
-  const [toolTip, showToolTip] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [isUserPresent, setIsUserPresent] = useState(false);
 
@@ -205,91 +202,128 @@ function Header({
       setIsUserPresent(false);
     }
   }, []);
-  useEffect(() => {
-    window.scrollTo(0, 500);
-  }, []);
 
   const toggleInputBox = () => {
-    //   ReactGA.event({
-    //     category: `button.clicked`,
-    //     action: `Input Box ${isInputBoxShown ? "Closed" : "Opened"}`,
-    //   });
     setisInputBoxShown(!isInputBoxShown);
   };
 
   return (
-    <div
-      style={{
-        background: "rgb(45,121,123)",
-      }}
-      className="flex py-2 px-4 justify-end items-center custom-shadow-medium"
+    <Flex
+      px={6}
+      py={3}
+      w="full"
+      justify="space-between"
+      align="center"
+      bg="rgba(15, 23, 42, 0.6)"
+      backdropFilter="blur(20px)"
+      borderBottom="1px solid"
+      borderColor="whiteAlpha.100"
+      boxShadow="0 4px 30px rgba(0, 0, 0, 0.1)"
     >
-      {/* <div className="flex items-center"> */}
-      {/* <div className="h-7 flex items-center font-medium text-xl codeFont text-orange-standard"> */}
-      {/* <img className="h-full" src={"./logo.png"} alt="codeconnect logo" /> */}
-      {/* <span className="ml-2">CodeConnect</span> */}
-      {/* </div> */}
-      {/* </div> */}
-      <div className="flex items-center">
-        <Tooltip label="Input/Output" hasArrow fontSize="md" bg="teal.600">
-          <button className=" text-white mr-4" onClick={toggleInputBox}>
-            <Icon
-              icon="bi:input-cursor-text"
-              className="text-white-standard"
-              height="24"
-            />
-          </button>
+      <HStack spacing={4}>
+        <Box
+          px={3}
+          py={1}
+          rounded="md"
+          bg="whiteAlpha.100"
+          border="1px solid"
+          borderColor="whiteAlpha.200"
+        >
+          <Text fontSize="sm" fontWeight="bold" bgGradient="linear(to-r, pink.400, purple.300)" bgClip="text" letterSpacing="widest" textTransform="uppercase">
+            ACTIVE ARENA WORKSPACE
+          </Text>
+        </Box>
+      </HStack>
+
+      <HStack spacing={4}>
+        <Tooltip label="Toggle Input/Output" hasArrow placement="bottom" bg="pink.600">
+          <IconButton
+            icon={<Icon icon="bi:input-cursor-text" fontSize="20px" />}
+            onClick={toggleInputBox}
+            variant="ghost"
+            color="gray.300"
+            _hover={{ bg: "whiteAlpha.200", color: "pink.300" }}
+            aria-label="Toggle Input"
+            size="sm"
+            rounded="full"
+          />
         </Tooltip>
-        <Tooltip label="Whiteboard" hasArrow fontSize="md" bg="teal.600">
-          <button className=" text-white mr-4" onClick={toggleModal}>
-            <Icon
-              icon={whiteboard24Regular}
-              className="text-while-standard"
-              height="28"
-            />
-          </button>
+
+        <Tooltip label="Open Whiteboard" hasArrow placement="bottom" bg="purple.600">
+          <IconButton
+            icon={<Icon icon={whiteboard24Regular} fontSize="22px" />}
+            onClick={toggleModal}
+            variant="ghost"
+            color="gray.300"
+            _hover={{ bg: "whiteAlpha.200", color: "purple.300" }}
+            aria-label="Toggle Whiteboard"
+            size="sm"
+            rounded="full"
+          />
         </Tooltip>
-        <Tooltip label="Run Code" hasArrow fontSize="sm" bg="teal.600">
-          <button
+
+        <Tooltip label="Execute Code" hasArrow placement="bottom" bg="green.500">
+          <Button
+            size="sm"
             onClick={runCode}
-            className="bg-white flex items-center text-base font-medium rounded px-3 py-0.5 mr-2"
+            isLoading={processing}
+            loadingText="Running"
+            leftIcon={<img src={runIcon} alt="run" style={{ width: '14px', filter: 'brightness(0) invert(1)' }} />}
+            bgGradient="linear(to-r, pink.500, purple.400)"
+            color="white"
+            _hover={{
+              bgGradient: "linear(to-r, pink.400, purple.300)",
+              transform: "translateY(-1px)",
+              boxShadow: "0 4px 12px rgba(159, 122, 234, 0.4)"
+            }}
+            _active={{ transform: "translateY(0)" }}
+            rounded="full"
+            px={5}
+            transition="all 0.2s"
           >
-            <img className="h-2.5" src={runIcon} alt="run code icon" />
-            <span className="ml-2">Run</span>
-          </button>
+            Run Code
+          </Button>
         </Tooltip>
-        {/* {
-            isAuthenticated ?
-              <Logout /> :
-              <Login />
-          } */}
+
+        <Tooltip label="Leave Room" hasArrow placement="bottom" bg="red.500">
+          <Button
+            size="sm"
+            onClick={handleLeaveRoom}
+            variant="solid"
+            bgGradient="linear(to-r, red.500, orange.500)"
+            color="white"
+            _hover={{
+              bgGradient: "linear(to-r, red.600, orange.600)",
+              transform: "translateY(-1px)",
+              boxShadow: "0 4px 12px rgba(229, 62, 62, 0.4)"
+            }}
+            _active={{ transform: "translateY(0)" }}
+            rounded="full"
+            px={5}
+          >
+            Leave
+          </Button>
+        </Tooltip>
+
         {isUserPresent && (
-          <Tooltip label={userInfo.email} hasArrow fontSize="sm" bg="teal.900">
-            <Avatar size="sm" name={userInfo.name} src={userInfo.picture} />
-          </Tooltip>
+          <Box ml={2} pl={4} borderLeft="1px solid" borderColor="whiteAlpha.200">
+            <Tooltip label={userInfo.email} hasArrow placement="bottom" bg="gray.700">
+              <Avatar
+                size="sm"
+                name={userInfo.name}
+                src={userInfo.picture}
+                border="2px solid"
+                borderColor="pink.500"
+                cursor="pointer"
+                transition="all 0.2s"
+                _hover={{ transform: "scale(1.1)", shadow: "0 0 10px rgba(255, 0, 128, 0.4)" }}
+              />
+            </Tooltip>
+          </Box>
         )}
-        <div className="mx-1 relative">
-          {isAuthenticated && (
-            <img
-              onMouseEnter={() => {
-                showToolTip(true);
-              }}
-              onMouseLeave={() => {
-                showToolTip(false);
-              }}
-              className="h-7 w-7 rounded-full"
-              src={userInfo.picture}
-              alt="user icon"
-            />
-          )}
-          {toolTip && isAuthenticated && (
-            <div className="absolute z-50 top-full right-0 mt-2 text-center text-xs text-gray-200 bg-black mr-4 px-1">
-              {userInfo.email}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+      </HStack>
+    </Flex>
   );
 }
+
 export default MockInterview;
